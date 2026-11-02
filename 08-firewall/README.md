@@ -33,6 +33,7 @@
 
 ![fw01 VM 어댑터 4개: 1번 NAT(WAN), 2번 호스트 전용(LAN), 3번 srvnet, 4번 usernet]
 <!-- 여기에 01-fw01-adapters.png 끌어다 놓기 -->
+![](01-fw01-adapters.png)
 
 ---
 
@@ -47,19 +48,23 @@ ISO(`.iso.bz2`라 7-Zip으로 압축 해제)로 설치한 뒤 콘솔에서 인�
 
 ![설치 후 기본값은 LAN/WAN이 반대(LAN em0 192.168.1.1, WAN em1)]
 <!-- 여기에 03-lan-wan-reversed.png 끌어다 놓기 -->
+![](03-lan-wan-reversed.png)
 
 ![지정 완료: LAN em1 192.168.56.10, OPT1 em2, OPT2 em3, WAN em0 DHCP]
 <!-- 여기에 05-console-assigned.png 끌어다 놓기 -->
+![](05-console-assigned.png)
 
 내 PC의 호스트 전용 어댑터(`이더넷 2` = 192.168.56.1)에서 `https://192.168.56.10`으로 웹 관리 화면에 접속했습니다.
 
 ![내 PC 확인: 호스트 전용 어댑터 192.168.56.1 → fw01 192.168.56.10 (공인 IP는 가림)]
 <!-- 여기에 06-host-ip-check.png 끌어다 놓기 -->
+![](06-host-ip-check.png)
 
 마법사(Wizard)에서 호스트 이름 `fw01.lab.local`, LAN IP를 넣고 **LAN DHCP 서버는 껐습니다.** VirtualBox 호스트 전용 네트워크에 이미 DHCP가 있어서, 하나 더 켜면 한 망에 DHCP 서버가 둘이 됩니다. 실무에서 겪은 "직원이 공유기를 꽂아 층 전체가 마비된 장애(Rogue DHCP)"와 같은 구조라 일부러 끄고 진행했습니다.
 
 ![마법사 LAN 설정: 192.168.56.10/24, Configure DHCP server 체크 해제]
 <!-- 여기에 07-wizard-lan-no-dhcp.png 끌어다 놓기 -->
+![]()
 
 ## 10-3. 서버망 · 직원망 인터페이스
 
@@ -72,10 +77,10 @@ ISO(`.iso.bz2`라 7-Zip으로 압축 해제)로 설치한 뒤 콘솔에서 인�
 
 ![SRV 인터페이스: opt1, em2, Static IPv4 (Apply 전)]
 <!-- 여기에 08-srv-interface.png 끌어다 놓기 -->
-
+![]()
 ![Interfaces Overview: LAN 192.168.56.10, SRV 10.10.10.1, USER 10.10.20.1]
 <!-- 여기에 09-interfaces-overview.png 끌어다 놓기 -->
-
+![]()
 ## 10-4. 별칭(Alias)과 방화벽 규칙
 
 IP를 규칙마다 직접 쓰지 않고 이름을 붙여 두면, 서버 IP가 바뀌어도 별칭 하나만 고치면 됩니다.
@@ -88,7 +93,7 @@ IP를 규칙마다 직접 쓰지 않고 이름을 붙여 두면, 서버 IP가 �
 
 ![별칭 목록: NET_PRIVATE, SRV_DC, SRV_WEB]
 <!-- 여기에 11-aliases.png 끌어다 놓기 -->
-
+![]()
 ### 직원망(USER) 규칙: 위에서부터 순서대로
 
 | # | 동작 | 출발 | 목적지 | 포트 | 설명 |
@@ -102,10 +107,10 @@ IP를 규칙마다 직접 쓰지 않고 이름을 붙여 두면, 서버 IP가 �
 
 ![USER 규칙 1번 편집: Interface USER, Pass, Source USER network, Destination SRV_DC]
 <!-- 여기에 12-user-rule-edit.png 끌어다 놓기 -->
-
+![]()
 ![USER 규칙 4개 완성 (DC 허용 → 업무 웹 허용 → 내부망 차단 → 인터넷 허용)]
 <!-- 여기에 13-user-rules.png 끌어다 놓기 -->
-
+![]()
 ### 서버망(SRV) 규칙
 
 | # | 동작 | 출발 | 목적지 | 설명 |
@@ -117,10 +122,10 @@ IP를 규칙마다 직접 쓰지 않고 이름을 붙여 두면, 서버 IP가 �
 
 ![SRV 규칙 2개 (직원망 차단 → 그 외 허용)]
 <!-- 여기에 14-srv-rules.png 끌어다 놓기 -->
-
+![]()
 ![fw01 자체 인터넷 확인: 8.8.8.8 ping 0% 손실]
 <!-- 여기에 15-fw01-ping-8888.png 끌어다 놓기 -->
-
+![]()
 ## 10-5. VM을 새 망으로 옮기기
 
 ### 내 PC → 서버망 경로 추가
@@ -136,17 +141,17 @@ route print 10.10.*
 
 ![경로 추가: 10.10.0.0/255.255.0.0 → 게이트웨이 192.168.56.10, 영구 경로 등록]
 <!-- 여기에 16-host-route.png 끌어다 놓기 -->
-
+![]()
 ### 서버 → srvnet
 
 dc01, lin01(본딩용 어댑터 2개 모두), mon01, bak01~03을 끄고 어댑터를 **내부 네트워크 `srvnet`**으로 바꿨습니다. 서버 안의 IP는 그대로 두고, 게이트웨이만 10.10.10.1(fw01)을 바라보게 했습니다.
 
 ![dc01 어댑터 → 내부 네트워크 srvnet]
 <!-- 여기에 17-dc01-srvnet.png 끌어다 놓기 -->
-
+![]()
 ![lin01 이동 후: 8.8.8.8 ping 성공, 외부 웹 HTTP/2 200 (fw01을 거쳐 인터넷까지)]
 <!-- 여기에 18-lin01-after-move.png 끌어다 놓기 -->
-
+![]()
 ### 직원 PC(cli01) → usernet
 
 IP 변경은 관리자 권한이 필요해서, 도메인 관리자 계정(`LAB\Administrator`)으로 UAC 승인을 받았습니다.
@@ -163,12 +168,12 @@ New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 10.10.20.100 -PrefixLengt
 
 ![cli01 IP 변경 완료: 10.10.20.100/24 (아래는 ipconfig 오타)]
 <!-- 여기에 21-cli01-ip-changed.png 끌어다 놓기 -->
-
+![]()
 ### 확인: 게이트웨이 ping이 안 되는데 dc01은 된다
 
 ![cli01: IP 10.10.20.100, 게이트웨이 10.10.20.1. 그런데 게이트웨이 ping은 Request timed out]
 <!-- 여기에 22-gateway-ping-timeout.png 끌어다 놓기 -->
-
+![]()
 ```bat
 :: [cli01] 규칙 1번(dc01 허용)을 거쳐 서버망 dc01 까지
 ping 10.10.10.10 -n 2
@@ -184,10 +189,10 @@ arp -a
 
 ![dc01 ping 성공(TTL=127), arp -a에 게이트웨이 MAC]
 <!-- 여기에 23-dc01-ttl127-arp.png 끌어다 놓기 -->
-
+![]()
 ![Live View: 10.10.20.100 → 10.10.20.1 ICMP block "그 외 내부망·관리망 차단" (고장이 아니라 설계대로 동작)]
 <!-- 여기에 24-liveview-gateway-block.png 끌어다 놓기 -->
-
+![]()
 ## 10-6. 정책 확인
 
 cli01(`LAB\kim.it`)에서 되어야 하는 것과 막혀야 하는 것을 모두 테스트하고, fw01 **Firewall → Log Files → Live View**에서 기록을 확인했습니다.
@@ -216,13 +221,13 @@ Test-NetConnection 192.168.56.10 -Port 443
 
 ![허용 테스트: DNS 조회 성공, 80·443 TcpTestSucceeded True]
 <!-- 여기에 25-allow-tests.png 끌어다 놓기 -->
-
+![]()
 ![차단 테스트: 22, 8080, 443 모두 False (출발지 10.10.20.100)]
 <!-- 여기에 26-block-tests.png 끌어다 놓기 -->
-
+![]()
 ![Live View: 10.10.20.100 → 10.10.10.20:22 block ×3, 같은 출발 포트 61407 (80·53은 pass)]
 <!-- 여기에 27-liveview-blocks.png 끌어다 놓기 -->
-
+![]()
 빨간 줄 3개의 출발 포트가 모두 **61407**로 같습니다. 한 번의 접속 시도에 응답이 없어 SYN을 **재전송**한 것입니다(27초 → 29초 → 30초). 출발 포트가 매번 바뀌며 여러 포트로 차단이 이어진다면 재전송이 아니라 새 접속 시도, 즉 스캔을 의심할 수 있습니다.
 
 ---
@@ -244,19 +249,19 @@ Test-NetConnection 192.168.56.10 -Port 443
 
 ![순서가 바뀐 USER 규칙: 내부망 차단이 업무 웹보다 위 (Apply 전 안내 문구)]
 <!-- 여기에 29-fault9-order-swapped.png 끌어다 놓기 -->
-
+![]()
 ![같은 웹, 다른 결과: cli01(10.10.20.100) False / 내 PC(192.168.56.1) True]
 <!-- 여기에 30-fault9-cli01-vs-host.png 끌어다 놓기 -->
-
+![]()
 ![Live View: 10.10.20.100 → 10.10.10.20:80 block (장애 원인 확정)]
 <!-- 여기에 31-fault9-liveview.png 끌어다 놓기 -->
-
+![]()
 ![원복: DC → 업무 웹 → 차단 → 인터넷]
 <!-- 여기에 32-fault9-restored.png 끌어다 놓기 -->
-
+![]()
 ![cli01 한 화면에 장애(False) → 원복 후(True)]
 <!-- 여기에 33-fault9-false-to-true.png 끌어다 놓기 -->
-
+![]()
 ### 장애 10: 게이트웨이(fw01) 다운
 
 | 단계 | 내용 |
@@ -278,12 +283,15 @@ ip route
 
 ![lin01: dc01만 성공(ttl=128), 게이트웨이 무응답, 인터넷은 자기 자신이 Unreachable 응답]
 <!-- 여기에 34-fault10-lin01.png 끌어다 놓기 -->
+![]()
 
 ![내 PC: 경로를 버리고 인터넷 랜카드(이더넷)로 나가서 False / cli01: 자기 자신이 Destination host unreachable (공인 IP는 가림)]
 <!-- 여기에 35-fault10-host-cli01.png 끌어다 놓기 -->
+![]()
 
 ![ip route: 10.10.10.0/24는 직접 연결(scope link), 그 외 전부 default via 10.10.10.1]
 <!-- 여기에 36-fault10-ip-route.png 끌어다 놓기 -->
+![]()
 
 | 에러 | 의미 |
 |---|---|
@@ -292,10 +300,11 @@ ip route
 
 ![복구 직후: lin01 게이트웨이(ttl=64)·인터넷 성공, 내 PC는 이더넷 2로 돌아왔지만 :80 아직 False (부팅 직후라 규칙·서비스 로딩 중)]
 <!-- 여기에 37-fault10-after-boot.png 끌어다 놓기 -->
+![]()
 
 ![1분 뒤 재확인: 이더넷 2(192.168.56.1) → lin01 :80 True]
 <!-- 여기에 38-fault10-recovered.png 끌어다 놓기 -->
-
+![]()
 ---
 
 ## 배운 점
@@ -338,16 +347,20 @@ ip route
 
 ![2. ISO를 먼저 빼서 vm_fault: pager read error]
 <!-- 여기에 02-vm-fault-iso-ejected.png 끌어다 놓기 -->
-![제목](02-vm-fault-iso-ejected.png)
+![](02-vm-fault-iso-ejected.png)
 
 ![4. 메뉴 번호 없이 IP를 바로 입력]
 <!-- 여기에 04-ip-typed-at-menu.png 끌어다 놓기 -->
+![](04-ip-typed-at-menu.png)
 
 ![7. 별칭 내용 앞 공백 → is not a network]
 <!-- 여기에 10-alias-space-error.png 끌어다 놓기 -->
+![](10-alias-space-error.png)
 
 ![10. IP를 안 바꾼 채 usernet으로 옮겨 UAC에서 도메인 사용 불가]
 <!-- 여기에 19-uac-domain-unavailable.png 끌어다 놓기 -->
+![](19-uac-domain-unavailable.png)
 
 ![16. Cannot move a rule before itself]
 <!-- 여기에 28-move-error.png 끌어다 놓기 -->
+![](28-move-error.png)
