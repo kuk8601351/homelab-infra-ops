@@ -338,6 +338,7 @@ ip route
 
 ![2. ISO를 먼저 빼서 vm_fault: pager read error]
 <!-- 여기에 02-vm-fault-iso-ejected.png 끌어다 놓기 -->
+02-vm-fault-iso-ejected.png
 
 ![4. 메뉴 번호 없이 IP를 바로 입력]
 <!-- 여기에 04-ip-typed-at-menu.png 끌어다 놓기 -->
